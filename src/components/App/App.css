@@ -1,0 +1,44 @@
+
+body{
+  margin: 0;
+  padding: 0;
+  background-color: #202020;
+}
+
+.body_menu_open{
+  width: 100%;
+  
+  position: fixed;
+}
+
+.page{
+  padding: 0;
+  margin:0 auto;
+  position: relative;
+}
+
+
+
+@media screen and (min-width: 1280px){
+.page{
+  position: relative;
+  max-width: 1280px;
+}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279px){
+  .page{
+    position: relative;
+    max-width: 768px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .page{
+    position: relative;
+  width: 100%;
+  }
+  body{
+   width: 100%;
+  }
+}

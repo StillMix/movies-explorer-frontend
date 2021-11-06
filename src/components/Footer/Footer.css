@@ -1,0 +1,115 @@
+.footer{
+    width: 100%;
+    padding-top: 79px;
+    margin-bottom: 0;
+}
+
+.footer__project__name{
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: center;
+    
+    color: #8B8B8B;   
+}
+
+.footer__container{
+    position: relative;
+    width: 89%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid #424242;;
+    display: flex;
+}
+
+.footer__copyright{
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;   
+    margin: 0;
+    color: #FFFFFF;
+    
+}
+
+.footer__container__link{
+    position: absolute;
+    right: 0;
+    display: flex;
+}
+
+.footer__link{
+    font-family: "Inter", "Arial", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;
+    text-decoration: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 20px;   
+    color: #FFFFFF;
+    
+}
+
+.footer__link:first-of-type{
+    margin-left: 0;
+}
+
+.footer__link:hover{
+    opacity: 0.5;
+}
+
+
+    
+    @media screen and (max-width: 767px) {
+
+        .footer__project__name{
+            font-size: 12px;
+            line-height: 15px;
+        }
+        
+        .footer__container{
+            text-align: center;
+            flex-direction: column-reverse;
+            padding-top: 30px;
+            padding-bottom: 10px;
+        }
+        
+        .footer__copyright{
+            font-size: 12px;
+            line-height: 15px; 
+            margin-top: 30px;
+            color: #8B8B8B;    
+        }
+        
+        .footer__container__link{
+            text-align: center;
+            position: static;
+            margin-left: auto;
+            margin-right: auto;
+            flex-direction: column;
+        }
+        .footer__link:first-of-type{
+            margin-top: 0;
+        }
+
+        .footer__link{
+            font-size: 12px;
+            line-height: 15px;
+            text-decoration: none;
+            margin-top: 12px;
+            margin-bottom: 0;
+            margin-left: 0px;
+            
+        }    
+        
+    }

@@ -9,23 +9,22 @@ function Register(props) {
         email: '',
         password: ''
       });
-    
+
       const handleChange = (evt) => {
         const target = evt.target;
         const name = target.name;
         const value = target.type === 'checkbox' ? target.checked : target.value;
-    
+
         setValues({
           ...values,
           [name]: value
         });
-       
+
       }
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        props.onSignUp();
-        console.log(values);
+        props.onSignUp(values);
         setValues({
             name: '',
             email: '',
@@ -34,7 +33,7 @@ function Register(props) {
       };
 
   return (
-   <>  <div className="register">           
+   <>  <div className="register">
       <Link to={'/'} className="register__logo"><img alt="логотип" src={Logo} /></Link>
       <p className="register__title">Добро пожаловать!</p>
       <form onSubmit={handleSubmit} className="registerform">

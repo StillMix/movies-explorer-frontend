@@ -9,22 +9,22 @@ function Login(props) {
         email: '',
         password: ''
       });
-    
+
       const handleChange = (evt) => {
         const target = evt.target;
         const name = target.name;
         const value = target.type === 'checkbox' ? target.checked : target.value;
-    
+
         setValues({
           ...values,
           [name]: value
         });
-       
+
       }
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        props.onSignIn();
+        props.onSignIn(values);
         console.log(values);
         setValues({
             email: '',
@@ -32,7 +32,7 @@ function Login(props) {
         })
       };
   return (
-    <>  <div className="login">           
+    <>  <div className="login">
     <Link to={'/'} className="login__logo"><img alt="логотип" src={Logo} /></Link>
     <p className="login__title">Рады видеть!</p>
     <form onSubmit={handleSubmit} className="loginform">
@@ -46,7 +46,7 @@ function Login(props) {
   </label>
   <button type="submit" className="loginform__btn">Войти</button>
      </form>
-     <p className="login__text">Ещё не зарегистрированы?<span> <Link to={'/signin'} className="login__ent">Регистрация</Link></span></p>
+     <p className="login__text">Ещё не зарегистрированы?<span> <Link to={'/signup'} className="login__ent">Регистрация</Link></span></p>
      </div>
  </>
   );

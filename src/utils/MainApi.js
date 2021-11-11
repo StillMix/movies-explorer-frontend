@@ -123,7 +123,7 @@ getContent(){
 }
 
 const MainApi = new Api({
-  url: 'http://localhost:3001',
+  url: 'https://backen-movies.nomoredomains.work',
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',

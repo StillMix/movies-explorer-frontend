@@ -4,7 +4,9 @@ const fetchApi = async ({
   const res = await fetch(`${BASE_URL}/${path}`, {
     method,
     headers: {
-      'Content-Type': 'application/json; charset=utf-8',
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Headers': true,
     },
     body: body && JSON.stringify(body),
     credentials,

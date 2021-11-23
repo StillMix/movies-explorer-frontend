@@ -1,15 +1,33 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-console */
+/* eslint-disable max-len */
+/* eslint-disable array-callback-return */
+/* eslint-disable no-empty */
+/* eslint-disable no-shadow */
+/* eslint-disable no-use-before-define */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Switch, Route, useHistory, useRouteMatch, Redirect } from 'react-router';
+import {
+  Switch,
+  Route,
+  useHistory,
+  useRouteMatch,
+  Redirect,
+} from 'react-router-dom';
 import './App.css';
+import React from 'react';
 import Main from '../Main/Main';
 
-import { UserContext} from '../../contexts/CurrentUserContext.js';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 import Movies from '../Movies/Movies';
 import MenuPopup from '../MenuPopup/MenuPopup';
-import SavedMovies from '../SavedMovies/SavedMovies';
+import savedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
 import NotFound from '../NotFound/NotFound';
 import Register from '../Register/Register';
@@ -17,187 +35,227 @@ import Login from '../Login/Login';
 import Header from '../Header/Header';
 
 import Footer from '../Footer/Footer';
-import React from 'react';
 
-import MainApi from '../../utils/MainApi';
-import MoviesApi from '../../utils/MoviesApi';
+import * as MainApi from '../../utils/MainApi';
+import * as moviesApi from '../../utils/MoviesApi';
 
 function App() {
-  const [isOpenMenu, setIsOpenMenu] = React.useState(false);
-  const [cards, setCards] = React.useState(null);
-  const [loggedIn, setLoggedIn] = React.useState(true);
-  const [currentUser, setCurrentUser] = React.useState(null);
+  const [currentUser, setCurrentUser] = React.useState([]);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [MoviesCard, setMovies] = React.useState([]);
+  const [savedMoviesCard, setSavedMovies] = React.useState([]);
+  const [SavedMoviesId, setSavedMoviesId] = React.useState([]);
+  const [IsOpenMenu, setIsOpenMenu] = React.useState(false);
 
   const history = useHistory();
 
-  const handleSignup = (user) => {
-    MainApi.register(user.password, user.email, user.name).then(data => {
-      if(data){
-        console.log(data)
-        history.push('/signin');
+  React.useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const user = await MainApi.getUserData();
+
+        setCurrentUser(user);
+        setIsLoggedIn(true);
+      } catch (err) {
+        setCurrentUser({});
+        setIsLoggedIn(false);
       }
-    })
+    };
+
+    getUserData();
+  }, []);
+
+  const handleUpdateProfile = async (userData) => {
+    try {
+      const user = await MainApi.updateProfile(userData);
+
+      setCurrentUser(user);
+    } catch (err) {
+
+    }
   };
 
-  const handleSignin = (user) => {
-    MainApi.authorize(user.password, user.email).then(data => {
-      if(data){
-        setCurrentUser(data);
-      }
-    }).finally(() => {
-      localStorage.setItem('token', user.email);
-      MoviesApi.getMovies().then((res) => {
-        if(res) {
-          setCards(res)
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (isLoggedIn && token) {
+      moviesApi.getMovies().then((res) => {
+        setMovies([MoviesCard, ...res]);
+      });
+      MainApi.getMovies().then((res) => {
+        if (res) {
+          setSavedMovies(res);
         }
-      })
-      .finally(() => {
-        MainApi.getContent().then((res) => {
-          if(res.message === 'Необходима авторизация'){
-           console.log(res)
-          }else{
-            setCurrentUser(res);
-            console.log(currentUser)
-            setLoggedIn(true);
-            history.push('/');
-          }
-        })
-        .catch(err => console.log(err));
-      })
-      .catch(err => console.log(err));
-    })
+      });
+    }
+  }, [isLoggedIn]);
+
+  const handleLogin = async (userData) => {
+    try {
+      const user = await MainApi.login(userData);
+      setCurrentUser(user);
+      setIsLoggedIn(true);
+      localStorage.setItem('token', user);
+    } catch (err) {
+      setCurrentUser(null);
+      setIsLoggedIn(false);
+    } finally {
+      history.push('/');
+    }
   };
 
-  const handleSignOut = () => {
-    setLoggedIn(false);
-    history.push('/');
+  const handleRegister = async (userData) => {
+    try {
+      await MainApi.register(userData);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log('Произошла ошибка');
+    } finally {
+      history.push('/signin');
+    }
   };
 
-  function closePopup() {
-    setIsOpenMenu(false)
+  const handleSignout = async () => {
+    try {
+      await MainApi.logout();
+
+      setIsLoggedIn(false);
+      setCurrentUser(null);
+
+      localStorage.clear();
+      setMovies(null);
+    } catch (err) {
+      console.log('произошла ошибка');
+    }
+  };
+
+  async function searchMovies(word) {
+    const checkbox = word.filtercheckbox ? word.filtercheckbox : null;
+    const keyword = word.search ? word.search.toLowerCase() : null;
+    const minDuration = checkbox ? 0 : 40;
+    moviesApi.getMovies().then((movie) => {
+      setMovies(movie);
+      setMovies((state) => state.filter((c) => c.nameRU.toLowerCase().includes(keyword) && c.duration > minDuration));
+    });
+  }
+
+  const searchSavedMovies = (word) => {
+    const checkbox = word.filtercheckbox ? word.filtercheckbox : null;
+    const keyword = word.search ? word.search.toLowerCase() : null;
+    const minDuration = checkbox ? 0 : 40;
+    MainApi.getMovies().then((movie) => {
+      setSavedMovies(movie);
+      setSavedMovies((state) => state.filter((c) => c.nameRU.toLowerCase().includes(keyword) && c.duration > minDuration));
+    });
+  };
+
+  const saveMovie = async (movie) => {
+    try {
+      const savedMovie = await MainApi.saveMovie(movie);
+
+      setSavedMovies([...savedMoviesCard, savedMovie]);
+      setSavedMoviesId([...SavedMoviesId, savedMovie.movieId]);
+    } catch (err) { }
+  };
+
+  const removeMovie = async (movieId) => {
+    try {
+      savedMoviesCard.map((i) => {
+        if (i.movieId === movieId) {
+          const removedMovie = MainApi.removeMovie(i._id);
+          setSavedMovies((state) => state.filter((c) => (c.id ? c.id : c.movieId !== movieId)));
+        }
+      });
+    } catch (err) {
+
+    }
+  };
+
+  function handleSignup() {
+    history.push('/signup');
+  }
+
+  function handleSignin() {
+    history.push('/signin');
   }
 
   function openMenuPopup() {
-    setIsOpenMenu(true)
+    setIsOpenMenu(true);
   }
 
-  function tokenCheck() {
-    if(localStorage.getItem('token')){
-      MoviesApi.getMovies().then((res) => {
-        if(res) {
-          setCards(res)
-        }
-      })
-      .finally(() => {
-        MainApi.getContent().then((res) => {
-          if(res.message === 'Необходима авторизация'){
-           console.log(res)
-          }else{
-            setCurrentUser(res);
-            console.log(currentUser)
-            setLoggedIn(true);
-          }
-        })
-        .catch(err => console.log(err));
-      })
-      .catch(err => console.log(err));
- }
- }
+  function closePopup() {
+    setIsOpenMenu(false);
+  }
 
- React.useEffect(() =>{
-  tokenCheck()
-},[])
+  const routesHeader = ['/notfound', '/signin', '/signup'];
 
-
-  const routesHeader = [
-    '/notfound',
-    '/signin',
-    '/signup',
-  ];
-
-  const routesFooter = [
-    '/notfound',
-    '/signin',
-    '/signup',
-    '/profile',
-  ];
+  const routesFooter = ['/notfound', '/signin', '/signup', '/profile'];
 
   return (
-   <>
-   <UserContext.Provider value={currentUser}>
-   <div className={`body ${isOpenMenu ? 'body_menu_open' : ''}`}>
-   <div className="page">
-     {
-       useRouteMatch(routesHeader) ?
-       (
-         null
-       ): (
-        <Header
-        isOpen={isOpenMenu}
-        setIsOpen={openMenuPopup}
-         loggedIn={loggedIn}
-         onSignup={handleSignup}
-         onSignin={handleSignin}
-         />
-       )
+    <>
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className={`body ${IsOpenMenu ? 'body_menu_open' : ''}`}>
+          <div className="page">
 
-     }
-     <Switch>
-
-     <Route exact path="/" >
-          <Main />
-      </Route>
-
-      <Route  path="/signup">
-          <Register onSignUp={handleSignup}/>
-      </Route>
-
-      <Route  path="/signin">
-          <Login onSignIn={handleSignin}/>
-      </Route>
-
-      <Route  path="/notfound">
-      <NotFound />
-
-
-      </Route>
-      <ProtectedRoute
-       path="/movies"
-       loggedIn={loggedIn}
-       component={Movies}
-      />
-      <ProtectedRoute
-       path="/saved-movies"
-       loggedIn={loggedIn}
-       component={SavedMovies}
-      />
-      <ProtectedRoute
-      onSignOut={handleSignOut}
-       path="/profile"
-       loggedIn={loggedIn}
-       component={Profile}
-      />
-
-
-      <Route path="*">
-      <Redirect to="/notfound" />
-       </Route>
-
-       </Switch>
-       {
-       useRouteMatch(routesFooter) ?
-       (
-         null
-       ): (
-        <Footer />
-       )
-
-     }
-   <MenuPopup isOpen={isOpenMenu} setIsClose={closePopup}/>
-   </div>
-   </div>
-   </UserContext.Provider>
-   </>
+            {useRouteMatch(routesHeader) ? null : (
+              <Header
+                isOpen={IsOpenMenu}
+                setIsOpen={openMenuPopup}
+                loggedIn={isLoggedIn}
+                onSignup={handleSignup}
+                onSignin={handleSignin}
+              />
+            )}
+            <Switch>
+              <Route exact path="/">
+                <Main />
+              </Route>
+              <Route path="/signup">
+                <Register onSignUp={handleRegister} />
+              </Route>
+              <Route path="/signin">
+                <Login onSignIn={handleLogin} />
+              </Route>
+              <Route path="/notfound">
+                <NotFound />
+              </Route>
+              <ProtectedRoute
+                saveMovie={saveMovie}
+                searchMovies={searchMovies}
+                cards={MoviesCard}
+                removeMovie={removeMovie}
+                savedMoviesIds={savedMoviesCard}
+                path="/movies"
+                loggedIn={isLoggedIn}
+                component={Movies}
+              />
+              <ProtectedRoute
+                searchMovies={searchSavedMovies}
+                saveMovie={saveMovie}
+                removeMovie={removeMovie}
+                savedMoviesIds={savedMoviesCard}
+                movies={savedMoviesCard}
+                path="/saved-movies"
+                loggedIn={isLoggedIn}
+                component={savedMovies}
+              />
+              <ProtectedRoute
+                onUpdateProfile={handleUpdateProfile}
+                onSignOut={handleSignout}
+                path="/profile"
+                loggedIn={isLoggedIn}
+                component={Profile}
+              />
+              <Route path="*">
+                <Redirect to="/notfound" />
+              </Route>
+            </Switch>
+            {useRouteMatch(routesFooter) ? null : <Footer />}
+            <MenuPopup isOpen={IsOpenMenu} setIsClose={closePopup} />
+          </div>
+        </div>
+      </CurrentUserContext.Provider>
+    </>
   );
 }
 

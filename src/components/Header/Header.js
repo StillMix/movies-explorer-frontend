@@ -1,12 +1,13 @@
+/* eslint-disable react/react-in-jsx-scope */
 import './Header.css';
+import { Link } from 'react-router-dom';
 import Logo from '../../images/header-logo.svg';
 import AccountIcon from '../../images/account-icon.svg';
 import HeaderMenu from '../../images/header-menu-icon.svg';
-import { Link } from 'react-router-dom';
 
 function Header(props) {
   return (
-   <>             
+   <>
    {props.loggedIn ? (
     <>
           <div className="header">
@@ -17,7 +18,7 @@ function Header(props) {
     <img className={`${props.isOpen ? 'popup__open' : 'header_menu_btn'}`} onClick={props.setIsOpen} alt="menu" src={HeaderMenu}></img>
    </div>
     </>
-) : (
+   ) : (
      <div className="header">
    <img alt="логотип" className="header__logo" src={Logo} />
    <div className="header__container">
@@ -25,7 +26,7 @@ function Header(props) {
       <Link className="header__btn" to={'/signin'}>Войти</Link>
     </div>
     </div>
-     )
+   )
    }
    </>
   );

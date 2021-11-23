@@ -1,4 +1,4 @@
-
+/* eslint-disable react/react-in-jsx-scope */
 import './Main.css';
 
 import Promo from '../Promo/Promo';
@@ -13,7 +13,7 @@ import Portfolio from '../Portfolio/Portfolio';
 
 function Main() {
   return (
-   <> 
+   <>
     <Promo />
     <AboutProject />
     <Techs />

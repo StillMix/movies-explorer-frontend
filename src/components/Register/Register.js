@@ -1,36 +1,35 @@
 import './Register.css';
 import React from 'react';
-import Logo from '../../images/header-logo.svg';
 import { Link } from 'react-router-dom';
+import Logo from '../../images/header-logo.svg';
 
 function Register(props) {
-    const [values, setValues] = React.useState({
-        name: '',
-        email: '',
-        password: ''
-      });
+  const [values, setValues] = React.useState({
+    name: '',
+    email: '',
+    password: '',
+  });
 
-      const handleChange = (evt) => {
-        const target = evt.target;
-        const name = target.name;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
+  const handleChange = (evt) => {
+    const { target } = evt;
+    const { name } = target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
 
-        setValues({
-          ...values,
-          [name]: value
-        });
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
 
-      }
-
-    const handleSubmit = (evt) => {
-        evt.preventDefault();
-        props.onSignUp(values);
-        setValues({
-            name: '',
-            email: '',
-            password: ''
-        })
-      };
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    props.onSignUp(values);
+    setValues({
+      name: '',
+      email: '',
+      password: '',
+    });
+  };
 
   return (
    <>  <div className="register">

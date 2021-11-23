@@ -1,36 +1,34 @@
-
 import './Login.css';
 import React from 'react';
-import Logo from '../../images/header-logo.svg';
 import { Link } from 'react-router-dom';
+import Logo from '../../images/header-logo.svg';
 
 function Login(props) {
-    const [values, setValues] = React.useState({
-        email: '',
-        password: ''
-      });
+  const [values, setValues] = React.useState({
+    email: '',
+    password: '',
+  });
 
-      const handleChange = (evt) => {
-        const target = evt.target;
-        const name = target.name;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
+  const handleChange = (evt) => {
+    const { target } = evt;
+    const { name } = target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
 
-        setValues({
-          ...values,
-          [name]: value
-        });
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
 
-      }
-
-    const handleSubmit = (evt) => {
-        evt.preventDefault();
-        props.onSignIn(values);
-        console.log(values);
-        setValues({
-            email: '',
-            password: ''
-        })
-      };
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    props.onSignIn(values);
+    console.log(values);
+    setValues({
+      email: '',
+      password: '',
+    });
+  };
   return (
     <>  <div className="login">
     <Link to={'/'} className="login__logo"><img alt="логотип" src={Logo} /></Link>

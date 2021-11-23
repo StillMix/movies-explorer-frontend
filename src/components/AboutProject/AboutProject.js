@@ -1,10 +1,8 @@
-
+/* eslint-disable react/react-in-jsx-scope */
 import './AboutProject.css';
-
 
 function AboutProject() {
   return (
-   <> 
      <div className="aboutproject">
 
         <div className="aboutproject__head">
@@ -34,7 +32,6 @@ function AboutProject() {
         </div>
 
      </div>
-   </>
   );
 }
 

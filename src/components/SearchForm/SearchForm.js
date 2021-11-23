@@ -6,33 +6,29 @@ import SerachIcon from '../../images/search-icon.svg';
 
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
-function SearchForm() {
+function SearchForm(props) {
   const [values, setValues] = React.useState({
-    search: ''
+    search: '',
   });
 
   const handleChange = (evt) => {
-    const target = evt.target;
-    const name = target.name;
+    const { target } = evt;
+    const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
 
     setValues({
       ...values,
-      [name]: value
+      [name]: value,
     });
-   
-  }
+  };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log(values);
-    setValues({
-      search: ''
-    })
+    props.searchMovies(values);
   };
 
   return (
-   <> 
+   <>
     <form onSubmit={handleSubmit} className="searchform">
     <img src={SerachIcon} className="searchform__icon" alt="Поиск"/>
     <input name="search" minLength="1" maxLength="30" value={values.search} onChange={handleChange} className="searchform__input" placeholder="Фильмы" required/>

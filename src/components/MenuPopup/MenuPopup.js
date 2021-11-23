@@ -1,13 +1,13 @@
-
+/* eslint-disable react/react-in-jsx-scope */
 import './MenuPopup.css';
 
+import { Link } from 'react-router-dom';
 import MenuClose from '../../images/menu-close.svg';
 import AccountIcon from '../../images/account-icon.svg';
-import { Link } from 'react-router-dom';
 
 function MenuPopup(props) {
   return (
-   <> 
+   <>
      <div className={`${props.isOpen ? 'menu' : 'menu__close'}`}>
      <div className="popup__background"></div>
      <div className="popup">

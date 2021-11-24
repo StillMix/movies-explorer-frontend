@@ -1,5 +1,5 @@
 const fetchApi = async ({
-  BASE_URL, path = '', method = 'GET', body = null, credentials = 'include',
+  BASE_URL, path = '', method = 'GET', body = null, credentials,
 }) => {
   const res = await fetch(`${BASE_URL}/${path}`, {
     method,

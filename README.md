@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # movies-explorer-frontend 
 
 ## ссылка на макет

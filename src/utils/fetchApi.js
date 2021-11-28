@@ -1,12 +1,13 @@
+/* eslint-disable quote-props */
 const fetchApi = async ({
-  BASE_URL, path = '', method = 'GET', body = null, credentials,
+  BASE_URL, path = '', method = 'GET', body = null, credentials = 'include',
 }) => {
   const res = await fetch(`${BASE_URL}/${path}`, {
     method,
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
       'Access-Control-Request-Headers': true,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
     },
     body: body && JSON.stringify(body),
     credentials,

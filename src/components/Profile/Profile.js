@@ -12,7 +12,6 @@ function Profile(props) {
   function handleCloseEdit() {
     setIsOpenEdit(false);
   }
-
   const [values, setValues] = React.useState({
     name: currentUser.data.name,
     email: currentUser.data.email,
@@ -54,10 +53,10 @@ function Profile(props) {
          ) : (
           <div className="profile__btns">
           <button className="profile__edit" onClick={handleOpenEdit}>Редактировать</button>
-          <button className="profile__exit" onClick={props.onSignOut}>Выйти из аккаунта</button>
        </div>
          )}
         </form>
+        <button className="profile__exit" onClick={props.onSignOut}>Выйти из аккаунта</button>
     </div>
    </>
   );

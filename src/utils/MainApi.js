@@ -11,7 +11,7 @@ export const login = ({ email, password }) => fetchApi({
 });
 
 export const logout = () => fetchApi({
-  BASE_URL, path: 'signout', method: 'POST',
+  BASE_URL, path: 'signout', method: 'POST', credentials: 'same-origin',
 });
 
 export const getUserData = () => fetchApi({

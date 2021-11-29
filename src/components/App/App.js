@@ -49,19 +49,19 @@ function App() {
 
   const history = useHistory();
 
+  const getUserData = async () => {
+    try {
+      const user = await MainApi.getUserData();
+
+      setCurrentUser(user);
+      setIsLoggedIn(true);
+    } catch (err) {
+      setCurrentUser({});
+      setIsLoggedIn(false);
+    }
+  };
+
   React.useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const user = await MainApi.getUserData();
-
-        setCurrentUser(user);
-        setIsLoggedIn(true);
-      } catch (err) {
-        setCurrentUser({});
-        setIsLoggedIn(false);
-      }
-    };
-
     getUserData();
   }, []);
 
@@ -93,25 +93,31 @@ function App() {
   const handleLogin = async (userData) => {
     try {
       const user = await MainApi.login(userData);
-      setCurrentUser(user);
-      setIsLoggedIn(true);
+      if (user) {
+        history.push('/');
+        getUserData();
+        setIsLoggedIn(true);
+        localStorage.setItem('token', userData.email);
+      }
       localStorage.setItem('token', `${userData.email}`);
     } catch (err) {
       setCurrentUser(null);
       setIsLoggedIn(false);
     } finally {
-      history.push('/');
     }
   };
 
   const handleRegister = async (userData) => {
     try {
-      await MainApi.register(userData);
+      await MainApi.register(userData).then((data) => {
+        if (data) {
+          history.push('/signin');
+        }
+      });
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log('Произошла ошибка');
     } finally {
-      history.push('/signin');
     }
   };
 

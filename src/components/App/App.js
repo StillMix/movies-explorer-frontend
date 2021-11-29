@@ -95,7 +95,7 @@ function App() {
       const user = await MainApi.login(userData);
       setCurrentUser(user);
       setIsLoggedIn(true);
-      localStorage.setItem('token', user);
+      localStorage.setItem('token', `${userData.email}`);
     } catch (err) {
       setCurrentUser(null);
       setIsLoggedIn(false);

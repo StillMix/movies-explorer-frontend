@@ -45,6 +45,7 @@
 }
 
 .portfolio__img{
+    object-fit: cover;
     margin-top: 20px;
     float: right;
 }

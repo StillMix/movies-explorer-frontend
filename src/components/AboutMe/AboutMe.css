@@ -67,7 +67,7 @@
 }
 
 .aboutme__photo{
-    object-fit: fill;
+    object-fit: cover;
     float: right;
     display: block;
     margin-left: auto;

@@ -20,11 +20,8 @@ import {
 import './App.css';
 import React from 'react';
 import Main from '../Main/Main';
-
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-
 import Movies from '../Movies/Movies';
 import MenuPopup from '../MenuPopup/MenuPopup';
 import savedMovies from '../SavedMovies/SavedMovies';

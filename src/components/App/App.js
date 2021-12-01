@@ -76,9 +76,7 @@ function App() {
   };
 
   React.useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (isLoggedIn && token) {
+    if (isLoggedIn) {
       moviesApi.getMovies().then((res) => {
         setMovies([MoviesCard, ...res]);
       });
@@ -97,9 +95,7 @@ function App() {
         history.push('/');
         getUserData();
         setIsLoggedIn(true);
-        localStorage.setItem('token', userData.email);
       }
-      localStorage.setItem('token', `${userData.email}`);
     } catch (err) {
       setCurrentUser(null);
       setIsLoggedIn(false);

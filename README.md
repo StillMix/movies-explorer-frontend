@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # movies-explorer-frontend 
 
 ## ссылка на макет
@@ -14,3 +15,6 @@ https://backen-movies.nomoredomains.work
 https://frontend-movies.nomoredomains.rocks/
 
 
+=======
+# movies-explorer-frontend
+>>>>>>> ecd4ebf32f01a1411fb71dfced6f891efdc4d261

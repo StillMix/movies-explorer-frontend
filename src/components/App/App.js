@@ -124,7 +124,6 @@ function App() {
       setIsLoggedIn(false);
       setCurrentUser(null);
 
-      localStorage.clear();
       setMovies(null);
     } catch (err) {
       console.log('произошла ошибка');

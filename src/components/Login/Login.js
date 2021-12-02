@@ -28,7 +28,7 @@ function Login(props) {
           <input name="password" type="password" id='password' minLength={1} maxLength={30} value={values.password} onChange={handleChange} className="loginform__input" placeholder="Введите Пароль" required/>
           <span className="form__error">{errors.password}</span>
   </label>
-        <button type="submit" className={`loginform__btn ${isValid ? '' : 'disable'}`}>Войти</button>
+        <button type="submit" className={`loginform__btn ${isValid || props.isFormDisabled ? '' : 'disable'}`}>Войти</button>
      </form>
      <p className="login__text">Ещё не зарегистрированы?<span> <Link to={'/signup'} className="login__ent">Регистрация</Link></span></p>
      </div>

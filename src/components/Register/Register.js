@@ -34,7 +34,7 @@ function Register(props) {
           <input name="password" type="password" id='password' minLength={1} maxLength={30} value={values.password} onChange={handleChange} className="registerform__input" placeholder="Введите Пароль" required/>
           <span className="form__error">{errors.password}</span>
     </label>
-    <button type="submit" className={`registerform__btn ${isValid ? '' : 'disable'}`}>Зарегистрироваться</button>
+        <button type="submit" className={`registerform__btn ${isValid || props.isFormDisabled ? '' : 'disable'}`}>Зарегистрироваться</button>
        </form>
        <p className="register__text">Уже зарегистрированы?<span> <Link to={'/signin'} className="register__ent">Войти</Link></span></p>
        </div>

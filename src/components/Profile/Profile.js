@@ -56,7 +56,7 @@ function Profile(props) {
        </div>
          )}
         </form>
-        <button className="profile__exit" onClick={props.onSignOut}>Выйти из аккаунта</button>
+        <button className={`profile__exit ${props.isFormDisabled ? 'disable' : ''}`} onClick={props.onSignOut}>Выйти из аккаунта</button>
     </div>
    </>
   );

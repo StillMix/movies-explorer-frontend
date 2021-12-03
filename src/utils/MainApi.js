@@ -18,8 +18,8 @@ export const getUserData = () => fetchApi({
   BASE_URL, path: 'users/me',
 });
 
-export const updateProfile = ({ name, email }) => fetchApi({
-  BASE_URL, path: 'users/me', method: 'PATCH', body: { name, email },
+export const updateProfile = (user) => fetchApi({
+  BASE_URL, path: 'users/me', method: 'PATCH', body: { name: user.name || null, email: user.email || null },
 });
 
 export const getMovies = () => fetchApi({

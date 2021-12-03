@@ -1,4 +1,4 @@
-.errore{
+.success{
     top: 0;
     left: 0;
   position: fixed;
@@ -13,13 +13,13 @@
   transition: opacity .5s, visibility .5s ease-in-out;
 }
 
-.errore_opened {
+.success_opened {
   visibility: visible;
   opacity: 1;
   z-index: 10;
 }
 
-.errore__container {
+.success__container {
   box-shadow: 0px 0px 25px 1px #000;
   border-radius: 20px;
   width: 60%;
@@ -32,7 +32,7 @@
   position: relative;
 }
 
-.errore__image {
+.success__image {
   margin-left: auto;
   margin-right: auto;
   margin-top: 30px;
@@ -41,7 +41,7 @@
   height: 200px;
 }
 
-.errore__text {
+.success__text {
   text-align: center;
   margin: 0;
   font-family: "Inter", "Arial", sans-serif;
@@ -52,7 +52,7 @@ line-height: 29px;
 text-align: center;
 }
 
-.errore__close-button {
+.success__close-button {
   position: absolute;
   top: -40px;
   right: -40px;
@@ -67,7 +67,7 @@ text-align: center;
   cursor: pointer;
 }
 
-.errore__close-button:hover {
+.success__close-button:hover {
   opacity: .6;
   transition: opacity 1s ease;
 }

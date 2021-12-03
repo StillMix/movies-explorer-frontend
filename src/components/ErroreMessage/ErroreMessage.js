@@ -5,13 +5,13 @@ import IMG from '../../images/errore-image.svg';
 import './ErroreMessage.css';
 
 function ErroreMessage(props) {
-  const closePopup = () => {
+  const closeerrore = () => {
     props.setIsOpen(false);
   };
 
   const handleEsc = (evt) => {
     if (evt.key === 'Escape') {
-      closePopup();
+      closeerrore();
     }
   };
   React.useEffect(() => {
@@ -23,11 +23,11 @@ function ErroreMessage(props) {
   });
 
   return (
-      <div className={`popup ${props.isOpen && 'popup_opened'}`}>
-          <div className="popup__container">
-        <img className="popup__image" src={IMG} alt="Результат запроса" />
-              <p className="popup__text">{props.message}</p>
-              <button className="popup__close-button" onClick={closePopup} />
+      <div className={`errore ${props.isOpen && 'errore_opened'}`}>
+          <div className="errore__container">
+        <img className="errore__image" src={IMG} alt="Результат запроса" />
+              <p className="errore__text">{props.message}</p>
+              <button className="errore__close-button" onClick={closeerrore} />
           </div>
       </div>
   );

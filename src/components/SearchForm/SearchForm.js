@@ -31,7 +31,7 @@ function SearchForm(props) {
    <>
     <form onSubmit={handleSubmit} className="searchform">
     <img src={SerachIcon} className="searchform__icon" alt="Поиск"/>
-    <input name="search" minLength="1" maxLength="30" value={values.search} onChange={handleChange} className="searchform__input" placeholder="Фильмы" required/>
+    <input name="search" minLength="1" maxLength="30" value={values.search} onChange={handleChange} className="searchform__input" placeholder="Фильмы"/>
     <button type="submit" className="searchform__btn"></button>
     <FilterCheckbox onChange={handleChange} value={values.filtercheckbox}/>
     </form>

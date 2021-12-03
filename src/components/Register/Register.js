@@ -26,7 +26,7 @@ function Register(props) {
     </label>
     <label>
     <p className="registerform__name">E-mail</p>
-          <input name="email" id='email' minLength={1} maxLength={30} value={values.email} onChange={handleChange} className="registerform__input" placeholder="Введите E-mail" required/>
+          <input name="email" value={values.email} onChange={handleChange} type="email" className="registerform__input" placeholder="Введите E-mail" id="email" required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" />
           <span className="form__error">{errors.email}</span>
     </label>
     <label>

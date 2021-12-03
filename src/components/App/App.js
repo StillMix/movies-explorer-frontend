@@ -31,7 +31,7 @@ import NotFound from '../NotFound/NotFound';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Header from '../Header/Header';
-
+import SuccessMessage from '../SuccessMessage/SuccessMessage';
 import Footer from '../Footer/Footer';
 
 import * as MainApi from '../../utils/MainApi';
@@ -46,9 +46,13 @@ function App() {
   const [savedMoviesCard, setSavedMovies] = React.useState([]);
   const [SavedMoviesId, setSavedMoviesId] = React.useState([]);
   const [IsOpenMenu, setIsOpenMenu] = React.useState(false);
-
+  const [isSuccess, setIsSuccess] = React.useState(false);
   const [isErrore, setIsErrore] = React.useState(false);
   const [message, setMessage] = React.useState('');
+
+  const showSuccess = () => {
+    setIsSuccess(true);
+  };
 
   const showError = (msg) => {
     if (msg == 'Validation failed') {
@@ -83,6 +87,7 @@ function App() {
       const user = await MainApi.updateProfile(userData);
 
       setCurrentUser(user);
+      showSuccess();
     } catch (err) {
       showError(err.message);
     } finally {
@@ -92,14 +97,34 @@ function App() {
 
   React.useEffect(() => {
     if (isLoggedIn) {
-      moviesApi.getMovies().then((res) => {
-        setMovies([MoviesCard, ...res]);
-      });
-      MainApi.getMovies().then((res) => {
-        if (res) {
-          setSavedMovies(res);
+      const SavedMovies = localStorage.getItem('SavedMovies');
+      const Movies = localStorage.getItem('movies');
+      const searchedMovies = localStorage.getItem('searchedMovies');
+      const SearchedSavedMovies = localStorage.getItem('searchedSavedMovies');
+      if (SavedMovies) {
+        if (SearchedSavedMovies) {
+          setSavedMovies(JSON.parse(SearchedSavedMovies));
+        } else {
+          setSavedMovies(JSON.parse(SavedMovies));
         }
-      });
+      } else {
+        MainApi.getMovies().then((res) => {
+          setSavedMovies([MoviesCard, ...res]);
+          localStorage.setItem('SavedMovies', JSON.stringify(res));
+        });
+      }
+      if (Movies) {
+        if (searchedMovies) {
+          setMovies(JSON.parse(searchedMovies));
+        } else {
+          setMovies(JSON.parse(Movies));
+        }
+      } else {
+        moviesApi.getMovies().then((res) => {
+          localStorage.setItem('movies', JSON.stringify(res));
+          setMovies([MoviesCard, ...res]);
+        });
+      }
     }
   }, [isLoggedIn]);
 
@@ -151,52 +176,76 @@ function App() {
     }
   };
 
+  const filterMovie = (movies, keyword = '', minDuration) => movies.filter(
+    (movie) => (keyword ? movie.nameRU.toLowerCase().includes(keyword.toLowerCase()) : true)
+        && movie.duration > minDuration,
+  );
+
   async function searchMovies(word) {
-    const movies = localStorage.getItem('movies');
-    const checkbox = word.filtercheckbox ? word.filtercheckbox : null;
-    const keyword = word.search ? word.search.toLowerCase() : null;
-    const minDuration = checkbox ? 0 : 40;
-    if (!movies) {
-      moviesApi.getMovies().then((movie) => {
-        localStorage.setItem('movies', JSON.stringify(movie));
-        setMovies(movie);
-        setMovies((state) => state.filter((c) => c.nameRU.toLowerCase().includes(keyword) && c.duration > minDuration));
-      }).catch((err) => {
-        showError(err.message);
-      });
-    } else {
+    if (word.search == '') {
+      localStorage.removeItem('searchedMovies');
+      const movies = localStorage.getItem('movies');
       setMovies(JSON.parse(movies));
-      setMovies((state) => state.filter((c) => c.nameRU.toLowerCase().includes(keyword) && c.duration > minDuration));
-      localStorage.setItem('searchedMovies', JSON.stringify(MoviesCard));
+    } else {
+      const movies = localStorage.getItem('movies');
+      const checkbox = word.filtercheckbox ? word.filtercheckbox : null;
+      const keyword = word.search ? word.search.toLowerCase() : null;
+      const minDuration = checkbox ? 0 : 40;
+      if (!movies) {
+        moviesApi.getMovies().then((movie) => {
+          localStorage.setItem('movies', JSON.stringify(movie));
+          const filter = filterMovie(movie, keyword, minDuration);
+          setMovies(filter);
+          localStorage.setItem('searchedMovies', JSON.stringify(filter));
+        }).catch((err) => {
+          showError(err.message);
+        });
+      } else {
+        const movies = JSON.parse(localStorage.getItem('movies'));
+        const filter = filterMovie(movies, keyword, minDuration);
+        setMovies(filter);
+        localStorage.setItem('searchedMovies', JSON.stringify(filter));
+      }
     }
   }
 
   const searchSavedMovies = (word) => {
-    const SavedMovies = localStorage.getItem('SavedMovies');
-    const checkbox = word.filtercheckbox ? word.filtercheckbox : null;
-    const keyword = word.search ? word.search.toLowerCase() : null;
-    const minDuration = checkbox ? 0 : 40;
-    if (!SavedMovies) {
-      MainApi.getMovies().then((movie) => {
-        localStorage.setItem('SavedMovies', JSON.stringify(movie));
-        setSavedMovies(movie);
-        setSavedMovies((state) => state.filter((c) => c.nameRU.toLowerCase().includes(keyword) && c.duration > minDuration));
-      }).catch((err) => {
-        showError(err.message);
-      });
+    if (word.search == '') {
+      localStorage.removeItem('searchedSavedMovies');
+      const SavedMovies = localStorage.getItem('SavedMovies');
+      setSavedMovies(JSON.parse(SavedMovies));
     } else {
-      setMovies(JSON.parse(SavedMovies));
-      setMovies((state) => state.filter((c) => c.nameRU.toLowerCase().includes(keyword) && c.duration > minDuration));
-      localStorage.setItem('searchedSavedMovies', JSON.stringify(MoviesCard));
+      const SavedMovies = localStorage.getItem('SavedMovies');
+      const checkbox = word.filtercheckbox ? word.filtercheckbox : null;
+      const keyword = word.search ? word.search.toLowerCase() : null;
+      const minDuration = checkbox ? 0 : 40;
+      if (!SavedMovies) {
+        MainApi.getMovies().then((movie) => {
+          localStorage.setItem('SavedMovies', JSON.stringify(movie));
+          const filter = filterMovie(movie, keyword, minDuration);
+          setSavedMovies(filter);
+          localStorage.setItem('searchedSavedMovies', JSON.stringify(filter));
+        }).catch((err) => {
+          showError(err.message);
+        });
+      } else {
+        const SavedMovies = JSON.parse(localStorage.getItem('SavedMovies'));
+        const filter = filterMovie(SavedMovies, keyword, minDuration);
+        setSavedMovies(filter);
+        localStorage.setItem('searchedSavedMovies', JSON.stringify(filter));
+      }
     }
   };
 
   const saveMovie = async (movie) => {
     try {
       const savedMovie = await MainApi.saveMovie(movie);
-
       setSavedMovies([...savedMoviesCard, savedMovie]);
       setSavedMoviesId([...SavedMoviesId, savedMovie.movieId]);
+      localStorage.removeItem('SavedMovies');
+      MainApi.getMovies().then((res) => {
+        localStorage.setItem('SavedMovies', JSON.stringify(res));
+      });
     } catch (err) { showError(err.message); }
   };
 
@@ -206,6 +255,10 @@ function App() {
         if (i.movieId === movieId) {
           const removedMovie = MainApi.removeMovie(i._id);
           setSavedMovies((state) => state.filter((c) => (c.id ? c.id : c.movieId !== movieId)));
+          localStorage.removeItem('SavedMovies');
+          MainApi.getMovies().then((res) => {
+            localStorage.setItem('SavedMovies', JSON.stringify(res));
+          });
         }
       });
     } catch (err) {
@@ -253,10 +306,16 @@ function App() {
                 <Main />
               </Route>
               <Route path="/signup">
-                <Register isFormDisabled={isFormDisabled} onSignUp={handleRegister} />
+                {isLoggedIn
+                  ? < Redirect to="/movies" />
+                  : <Register isFormDisabled={isFormDisabled} onSignUp={handleRegister} />
+              }
               </Route>
               <Route path="/signin">
-                <Login isFormDisabled={isFormDisabled} onSignIn={handleLogin} />
+                {isLoggedIn
+                  ? < Redirect to="/movies" />
+                  : <Login isFormDisabled={isFormDisabled} onSignIn={handleLogin} />
+                }
               </Route>
               <Route path="/notfound">
                 <NotFound />
@@ -300,6 +359,8 @@ function App() {
               isOpen={isErrore}
               setIsOpen={setIsErrore}
             />
+            <SuccessMessage isOpen={isSuccess}
+              setIsOpen={setIsSuccess}/>
           </div>
         </div>
       </CurrentUserContext.Provider>

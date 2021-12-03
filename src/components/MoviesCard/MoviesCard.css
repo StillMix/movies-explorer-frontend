@@ -15,8 +15,13 @@
 }
 
 .card__img{
+    cursor: pointer;
     width: 100%;
     margin: 0;
+}
+
+.card__img:hover{
+    opacity: 0.8;
 }
 
 .card__container{

@@ -48,11 +48,12 @@ function MoviesCardList(props) {
 
   return (
         <>
-            <ul className="cards">
-                {props.cards.reduce((moviesToRender, movie) => {
-                  if (moviesToRender.length < renderedMovies) {
-                    if (movie.id) {
-                      moviesToRender.push(
+      <ul className={`${!props.cards.length === 0 ? 'cards' : 'cards__error'}`}>
+        {props.cards.length === 0 ? (<p className="cards_error_text">Ничего не найдено</p>)
+          : props.cards.reduce((moviesToRender, movie) => {
+            if (moviesToRender.length < renderedMovies) {
+              if (movie.id) {
+                moviesToRender.push(
                             <MoviesCard
                                 key={movie.id}
                                 saveMovie={props.saveMovie}
@@ -60,10 +61,10 @@ function MoviesCardList(props) {
                                 savedMoviesIds={props.savedMoviesIds}
                                 card={{ ...movie }}
                             />,
-                      );
-                    }
-                    if (movie.movieId) {
-                      moviesToRender.push(
+                );
+              }
+              if (movie.movieId) {
+                moviesToRender.push(
                         <MoviesCard
                           key={movie.movieId}
                           saveMovie={props.saveMovie}
@@ -71,11 +72,12 @@ function MoviesCardList(props) {
                           savedMoviesIds={props.savedMoviesIds}
                           card={{ ...movie }}
                         />,
-                      );
-                    }
-                  }
-                  return moviesToRender;
-                }, [])}
+                );
+              }
+            }
+            return moviesToRender;
+          }, [])
+                }
             </ul>
             {props.cards.length > renderedMovies && (
                 <div className="movies">

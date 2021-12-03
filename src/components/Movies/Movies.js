@@ -24,7 +24,7 @@ function Movies(props) {
 
   return (
     <>
-      <SearchForm searchMovies={props.searchMovies} />
+      <SearchForm searchMovies={props.searchMovies}/>
       {
         isPreloader ? (
           <>

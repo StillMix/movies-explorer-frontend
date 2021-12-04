@@ -7,8 +7,11 @@ import SerachIcon from '../../images/search-icon.svg';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
 function SearchForm(props) {
+  const word = props.word ? props.word : '';
+  const { checkbox } = props;
   const [values, setValues] = React.useState({
-    search: '',
+    search: word,
+    filtercheckbox: checkbox,
   });
 
   const handleChange = (evt) => {

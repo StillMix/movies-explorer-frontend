@@ -39,6 +39,7 @@ import * as moviesApi from '../../utils/MoviesApi';
 import ErroreMessage from '../ErroreMessage/ErroreMessage';
 
 function App() {
+  const [isTokenChecked, setIsTokenChecked] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState([]);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isFormDisabled, setIsFormDisabled] = React.useState(false);
@@ -74,6 +75,9 @@ function App() {
     } catch (err) {
       setCurrentUser({});
       setIsLoggedIn(false);
+    } finally {
+      setIsTokenChecked(true);
+      history.push('/movies');
     }
   };
 
@@ -133,7 +137,6 @@ function App() {
       setIsFormDisabled(true);
       const user = await MainApi.login(userData);
       if (user) {
-        history.push('/');
         getUserData();
         setIsLoggedIn(true);
       }
@@ -151,7 +154,7 @@ function App() {
       setIsFormDisabled(true);
       await MainApi.register(userData).then((data) => {
         if (data) {
-          history.push('/signin');
+          handleLogin({ email: userData.email, password: userData.password });
         }
       });
     } catch (err) {
@@ -182,30 +185,40 @@ function App() {
   );
 
   async function searchMovies(word) {
-    if (word.search == '') {
-      localStorage.removeItem('searchedMovies');
-      const movies = localStorage.getItem('movies');
-      setMovies(JSON.parse(movies));
-    } else {
-      const movies = localStorage.getItem('movies');
-      const checkbox = word.filtercheckbox ? word.filtercheckbox : null;
-      const keyword = word.search ? word.search.toLowerCase() : null;
-      const minDuration = checkbox ? 0 : 40;
-      if (!movies) {
-        moviesApi.getMovies().then((movie) => {
-          localStorage.setItem('movies', JSON.stringify(movie));
-          const filter = filterMovie(movie, keyword, minDuration);
+    try {
+      if (word.search == '') {
+        localStorage.removeItem('searchedMovies');
+        const movies = localStorage.getItem('movies');
+        setMovies(JSON.parse(movies));
+      } else {
+        const movies = localStorage.getItem('movies');
+        const checkbox = word.filtercheckbox;
+        const keyword = word.search ? word.search.toLowerCase() : null;
+        const minDuration = !checkbox ? 0 : 40;
+        if (!movies) {
+          moviesApi.getMovies().then((movie) => {
+            localStorage.setItem('movies', JSON.stringify(movie));
+            const filter = filterMovie(movie, keyword, minDuration);
+            setMovies(filter);
+            localStorage.setItem('searchedMovies', JSON.stringify(filter));
+            localStorage.setItem('searchedMoviesWord', JSON.stringify(keyword));
+            localStorage.setItem('searchedMoviesCheckBox', JSON.stringify(checkbox));
+          }).catch((err) => {
+            showError(err.message);
+          });
+        } else {
+          const movies = JSON.parse(localStorage.getItem('movies'));
+          const filter = filterMovie(movies, keyword, minDuration);
           setMovies(filter);
           localStorage.setItem('searchedMovies', JSON.stringify(filter));
-        }).catch((err) => {
-          showError(err.message);
-        });
-      } else {
-        const movies = JSON.parse(localStorage.getItem('movies'));
-        const filter = filterMovie(movies, keyword, minDuration);
-        setMovies(filter);
-        localStorage.setItem('searchedMovies', JSON.stringify(filter));
+          localStorage.setItem('searchedMoviesWord', JSON.stringify(keyword));
+          localStorage.setItem('searchedMoviesCheckBox', JSON.stringify(checkbox));
+        }
       }
+    } catch {
+
+    } finally {
+
     }
   }
 
@@ -216,15 +229,17 @@ function App() {
       setSavedMovies(JSON.parse(SavedMovies));
     } else {
       const SavedMovies = localStorage.getItem('SavedMovies');
-      const checkbox = word.filtercheckbox ? word.filtercheckbox : null;
+      const checkbox = word.filtercheckbox;
       const keyword = word.search ? word.search.toLowerCase() : null;
-      const minDuration = checkbox ? 0 : 40;
+      const minDuration = !checkbox ? 0 : 40;
       if (!SavedMovies) {
         MainApi.getMovies().then((movie) => {
           localStorage.setItem('SavedMovies', JSON.stringify(movie));
           const filter = filterMovie(movie, keyword, minDuration);
           setSavedMovies(filter);
           localStorage.setItem('searchedSavedMovies', JSON.stringify(filter));
+          localStorage.setItem('searchedSavedMoviesWord', JSON.stringify(keyword));
+          localStorage.setItem('searchedSavedMoviesCheckBox', JSON.stringify(checkbox));
         }).catch((err) => {
           showError(err.message);
         });
@@ -233,6 +248,8 @@ function App() {
         const filter = filterMovie(SavedMovies, keyword, minDuration);
         setSavedMovies(filter);
         localStorage.setItem('searchedSavedMovies', JSON.stringify(filter));
+        localStorage.setItem('searchedSavedMoviesWord', JSON.stringify(keyword));
+        localStorage.setItem('searchedSavedMoviesCheckBox', JSON.stringify(checkbox));
       }
     }
   };
@@ -291,7 +308,6 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <div className={`body ${IsOpenMenu ? 'body_menu_open' : ''}`}>
           <div className="page">
-
             {useRouteMatch(routesHeader) ? null : (
               <Header
                 isOpen={IsOpenMenu}
@@ -301,57 +317,59 @@ function App() {
                 onSignin={handleSignin}
               />
             )}
-            <Switch>
-              <Route exact path="/">
-                <Main />
-              </Route>
-              <Route path="/signup">
-                {isLoggedIn
-                  ? < Redirect to="/movies" />
-                  : <Register isFormDisabled={isFormDisabled} onSignUp={handleRegister} />
-              }
-              </Route>
-              <Route path="/signin">
-                {isLoggedIn
-                  ? < Redirect to="/movies" />
-                  : <Login isFormDisabled={isFormDisabled} onSignIn={handleLogin} />
-                }
-              </Route>
-              <Route path="/notfound">
-                <NotFound />
-              </Route>
-              <ProtectedRoute
-                saveMovie={saveMovie}
-                searchMovies={searchMovies}
-                cards={MoviesCard}
-                removeMovie={removeMovie}
-                savedMoviesIds={savedMoviesCard}
-                path="/movies"
-                loggedIn={isLoggedIn}
-                component={Movies}
-              />
-              <ProtectedRoute
-                searchMovies={searchSavedMovies}
-                saveMovie={saveMovie}
-                removeMovie={removeMovie}
-                savedMoviesIds={savedMoviesCard}
-                movies={savedMoviesCard}
-                path="/saved-movies"
-                loggedIn={isLoggedIn}
-                component={savedMovies}
-              />
-              <ProtectedRoute
-                onUpdateProfile={handleUpdateProfile}
-                onSignOut={handleSignout}
-                isFormDisabled={isFormDisabled}
-                path="/profile"
-                loggedIn={isLoggedIn}
-                component={Profile}
-              />
-              <Route path="*">
-                <Redirect to="/notfound" />
-              </Route>
-            </Switch>
+            {isTokenChecked && (
+              <Switch>
+                <Route exact path="/">
+                  <Main />
+                </Route>
+                <Route path="/signup">
+                  {isLoggedIn
+                    ? < Redirect to="/movies" />
+                    : <Register isFormDisabled={isFormDisabled} onSignUp={handleRegister} />
+                  }
+                </Route>
+                <Route path="/signin">
+                  {isLoggedIn
+                    ? < Redirect to="/movies" />
+                    : <Login isFormDisabled={isFormDisabled} onSignIn={handleLogin} />
+                  }
+                </Route>
+                <Route path="/notfound">
+                  <NotFound />
+                </Route>
+                <ProtectedRoute
+                  saveMovie={saveMovie}
+                  searchMovies={searchMovies}
+                  cards={MoviesCard}
+                  removeMovie={removeMovie}
+                  savedMoviesIds={savedMoviesCard}
+                  path="/movies"
+                  loggedIn={isLoggedIn}
+                  component={Movies}
+                />
+                <ProtectedRoute
+                  searchMovies={searchSavedMovies}
+                  saveMovie={saveMovie}
+                  removeMovie={removeMovie}
+                  savedMoviesIds={savedMoviesCard}
+                  movies={savedMoviesCard}
+                  path="/saved-movies"
+                  loggedIn={isLoggedIn}
+                  component={savedMovies}
+                />
+                <ProtectedRoute
+                  onUpdateProfile={handleUpdateProfile}
+                  onSignOut={handleSignout}
+                  isFormDisabled={isFormDisabled}
+                  path="/profile"
+                  loggedIn={isLoggedIn}
+                  component={Profile}
+                />
+                <Route path="*">
+                  <Redirect to="/notfound" />
+                </Route>
+              </Switch>
+            )}
             {useRouteMatch(routesFooter) ? null : <Footer />}
             <MenuPopup isOpen={IsOpenMenu} setIsClose={closePopup} />
             <ErroreMessage

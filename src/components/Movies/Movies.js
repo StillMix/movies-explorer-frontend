@@ -11,6 +11,8 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 
 function Movies(props) {
+  const word = JSON.parse(localStorage.getItem('searchedMoviesWord'));
+  const checkbox = JSON.parse(localStorage.getItem('searchedMoviesCheckBox'));
   const [isPreloader, setIsPreloader] = React.useState(false);
   React.useEffect(() => {
     function preloaderTime() {
@@ -24,7 +26,7 @@ function Movies(props) {
 
   return (
     <>
-      <SearchForm searchMovies={props.searchMovies}/>
+      <SearchForm checkbox={checkbox} word={word} searchMovies={props.searchMovies}/>
       {
         isPreloader ? (
           <>

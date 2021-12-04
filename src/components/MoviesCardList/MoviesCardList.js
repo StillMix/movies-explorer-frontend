@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React from 'react';
 
 import './MoviesCardList.css';
@@ -5,6 +6,7 @@ import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 function MoviesCardList(props) {
+  const loadCard = props.cards.length ? props.cards.length : 0;
   const [renderedMovies, setRenderedMovies] = React.useState(0);
   const [moviesRenderMore, setMoviesRenderMore] = React.useState(0);
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
@@ -38,9 +40,9 @@ function MoviesCardList(props) {
         setMoviesRenderMore(3);
       }
     } else {
-      setRenderedMovies(props.cards.length);
+      setRenderedMovies(loadCard);
     }
-  }, [windowWidth, location, props.cards.length]);
+  }, [windowWidth, location, loadCard]);
 
   const handleMore = () => {
     setRenderedMovies(renderedMovies + moviesRenderMore);
@@ -48,7 +50,7 @@ function MoviesCardList(props) {
 
   return (
         <>
-      <ul className={`${!props.cards.length === 0 ? 'cards' : 'cards__error'}`}>
+      <ul className={`${loadCard == 0 ? 'cards__error' : 'cards'}`}>
         {props.cards.length === 0 ? (<p className="cards_error_text">Ничего не найдено</p>)
           : props.cards.reduce((moviesToRender, movie) => {
             if (moviesToRender.length < renderedMovies) {

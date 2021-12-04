@@ -187,6 +187,8 @@ function App() {
   async function searchMovies(word) {
     try {
       if (word.search == '') {
+        localStorage.removeItem('searchedMoviesCheckBox');
+        localStorage.removeItem('searchedMoviesWord');
         localStorage.removeItem('searchedMovies');
         const movies = localStorage.getItem('movies');
         setMovies(JSON.parse(movies));
@@ -224,6 +226,8 @@ function App() {
 
   const searchSavedMovies = (word) => {
     if (word.search == '') {
+      localStorage.removeItem('searchedSavedMoviesCheckBox');
+      localStorage.removeItem('searchedSavedMoviesWord');
       localStorage.removeItem('searchedSavedMovies');
       const SavedMovies = localStorage.getItem('SavedMovies');
       setSavedMovies(JSON.parse(SavedMovies));

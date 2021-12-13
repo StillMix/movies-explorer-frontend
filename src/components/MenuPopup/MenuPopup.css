@@ -1,0 +1,156 @@
+
+    .menu__close{ 
+        transition: 1s;
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+    }
+    
+
+.popup__container{
+    margin-top: 160px;
+    display: flex;
+    flex-direction: column;
+}
+.popup__main:hover{
+    opacity: 0.5;
+}
+
+.popup__main{
+    font-family: "Inter", "Arial", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;   
+    text-align: center;
+    text-decoration: none;
+    color: #FFFFFF;
+    
+}
+.popup__film:hover{
+    opacity: 0.5;
+}
+
+.popup__film{
+    margin-top: 30px;
+    font-family: "Inter", "Arial", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    
+    color: #FFFFFF;
+    
+}
+
+.popup__savedfilm:hover{
+    opacity: 0.5;
+}
+
+.popup__savedfilm{
+    margin-top: 30px;
+    font-family: "Inter", "Arial", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+.popup__account:hover{
+    opacity: 0.5;
+}
+
+.popup__account{
+    position: absolute;
+    bottom: 92px;
+    left:50%;
+    transform:translate(-50%,-50%);
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "Inter", "Arial", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;   
+    color: #FFFFFF;
+}
+
+.menu__btn__close:hover{
+   opacity: 0.5;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279px){
+    .menu{
+        position: fixed;
+        z-index: 3;
+        top: 0;
+        height: 100%;
+        width: 768px;
+    }
+    
+    .popup{
+        transition: 1s;
+        background: #202020;
+        height: 100%;
+        width: 524px; 
+        right: 0;
+        position: absolute;
+    }
+    
+    .popup__background{
+        background: #000000;
+        opacity: 0.3;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .menu__btn__close{
+        cursor: pointer;
+        position: absolute;
+        top: 30px;
+        right: 30px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .menu{
+        z-index: 3;
+        position: fixed;
+        top: 0;
+        height: 100%;
+        width: 100%;
+    }
+    .popup__container{
+        margin-top: 150px;
+    }
+    
+    .popup{
+        transition: 1s;
+        background: #202020;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+    }
+    
+    .popup__background{
+     visibility:hidden;
+     opacity: 0;
+
+    }
+    .menu__btn__close{
+        cursor: pointer;
+        position: absolute;
+        top: 30px;
+        right: 30px;
+    }
+    .popup__account{
+        bottom: 48px;
+    }
+}

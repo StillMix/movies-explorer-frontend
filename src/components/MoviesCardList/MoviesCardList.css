@@ -1,0 +1,44 @@
+.cards {
+    list-style: none;
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 70px 70px 30px 70px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px 24px;
+    justify-items: center;
+  }
+  
+  @media screen and (min-width: 768px) and (max-width: 1279px){
+    .cards {
+      padding-left: 30px;
+      padding-right: 30px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 36px 30px;
+    }
+  }
+  
+  @media screen and (max-width: 767px) {
+    .cards {
+      padding-top: 40px;
+      padding-left: 10px;
+      padding-right: 10px;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 16px;
+    }
+  }
+
+  .cards_error_text{
+   font-family: "Inter", "Arial", sans-serif;
+   font-weight: 900;
+   font-size: 30px;
+   line-height: 35px;
+   color: #A3A3A3;
+  }
+
+  .cards__error{
+    text-align: center;
+    max-width: 1280px;
+  }

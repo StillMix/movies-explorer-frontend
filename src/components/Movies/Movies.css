@@ -1,0 +1,26 @@
+.movies__btn{
+    margin-top: 50px;
+    background: transparent;
+    border: 1px solid #424242;
+    outline: none;
+    width: 320px;
+    height: 36px;
+    cursor: pointer;
+    font-family: "Inter", "Arial", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    color: #FFFFFF;
+    margin-left: auto;
+    margin-right: auto;
+} 
+
+.movies{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+

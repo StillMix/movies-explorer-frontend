@@ -1,7 +1,14 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 # movies-explorer-frontend 
+
+##Описание
+Проект написан на языке програмирования JS с фреймворком React. Содержит описание студента Яндекс.Практикума. Так же зарегистрированным пользователям открывается список фильмов которые можно добавить в "Понравиолось". Редактирование информации пользователя.
+
+##Что нужно для запуска
+1 - NodeJS
+2 - Backend данного проекта.
+
+Заходим в папку с Backend-ом через консоль вписываем npm install , после загрузки npm dev . Дальше заходим в папку с Frontend частью , так же через консоль. Вписываем npm install , после загрузки npm start.
 
 ## ссылка на макет
 
@@ -16,9 +23,3 @@ https://backen-movies.nomoredomains.work
 https://frontend-movies.nomoredomains.rocks/
 
 
-=======
-# movies-explorer-frontend
->>>>>>> ecd4ebf32f01a1411fb71dfced6f891efdc4d261
-=======
-# movies-explorer-frontend
->>>>>>> f50ce8521c0d7c9b377258b9e3afa7456de0eb88
